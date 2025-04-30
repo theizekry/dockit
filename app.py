@@ -1,5 +1,5 @@
 import typer
-from Commands.init import InitCommand
+from commands.init import InitCommand
 
 class DockitCLI:
     def __init__(self):
