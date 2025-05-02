@@ -50,11 +50,26 @@ class Generator:
                     # Generate Dockerfile
                     self.generate_dockerfile(service_name, service_config)
                     
-                    # Update compose.build
+                    # Update compose.build using only the version number
+                    version = service_config['build']['base_image'].split(':')[1].split('-')[0]
                     service_config['compose']['build'] = {
-                        'context': f"./dockit/{service_name}-{service_config['build']['base_image'].split(':')[1]}",
+                        'context': f"./dockit/{service_name}-{version}",
                         'dockerfile': "Dockerfile"
                     }
+
+                # Handle publishable files
+                if 'publishable_files' in service_config:
+                    if 'volumes' not in service_config['compose']:
+                        service_config['compose']['volumes'] = []
+                    
+                    for file_config in service_config['publishable_files']:
+                        # Add volume mapping
+                        service_config['compose']['volumes'].append(
+                            f"{file_config['source']}:{file_config['target']}"
+                        )
+                        
+                        # Log the file mapping
+                        self.messenger.info(f"Mapping {file_config['source']} to {file_config['target']}")
 
             # Render docker-compose template
             template = self.env.get_template('docker-compose.yml.j2')
@@ -72,7 +87,8 @@ class Generator:
             
             self.messenger.info('Generated docker-compose.yml')
         except Exception as e:
-            self.messenger.error(f'Error generating docker-compose.yml: {str(e)}')
+            self.messenger.error(f"Error generating docker-compose.yml: {str(e)}")
+
 
     def generate_dockerfile(self, service_name: str, service_config: dict):
         """Generate Dockerfile for a service"""
@@ -86,8 +102,9 @@ class Generator:
                 build=service_config['build']
             )
             
-            # Create build directory
-            build_dir = f"./dockit/{service_name}-{service_config['build']['base_image'].split(':')[1]}"
+            # Create build directory using only the version number
+            version = service_config['build']['base_image'].split(':')[1].split('-')[0]
+            build_dir = f"./dockit/{service_name}-{version}"
             os.makedirs(build_dir, exist_ok=True)
             
             # Write the Dockerfile

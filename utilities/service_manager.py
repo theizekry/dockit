@@ -4,6 +4,7 @@ from typing import Dict, Optional, List
 from questionary import Choice
 import questionary
 from utilities.messenger import Messenger
+import fnmatch
 
 class ServiceManager:
     def __init__(self):
@@ -11,6 +12,44 @@ class ServiceManager:
         self.services = self.load_all_services()
         self.messenger = Messenger()
 
+    def get_container_path(self, service_name: str, filename: str) -> str:
+        """Get container path for a file based on service configuration"""
+        
+        service_config = self.service_paths[service_name]
+        
+        # Check for exact matches first
+        if filename in service_config['file_patterns']:
+            return service_config['file_patterns'][filename]
+        
+        # Check for pattern matches
+        for pattern, path in service_config['file_patterns'].items():
+            if fnmatch.fnmatch(filename, pattern):
+                return path.replace('{filename}', filename)
+        
+        # Use default path if no pattern matches
+        return os.path.join(service_config['default_path'], filename)
+
+    def scan_publishable_files(self, service_name: str, version: str, service_config: dict) -> list:
+        """Scan for additional publishable files in the service directory"""
+        publishable_files = []
+        service_dir = os.path.join('services', service_name)
+        
+        # Only process files that are explicitly defined in the files array
+        if 'files' in service_config:
+            for file_name, file_config in service_config['files'].items():
+                source_path = file_config['source'].format(version=version)
+                full_source_path = os.path.join(service_dir, source_path)
+                
+                if os.path.exists(full_source_path):
+                    publishable_files.append({
+                        'source': full_source_path,
+                        'target': file_config['destination']
+                    })
+                    self.messenger.info(f"Found publishable file: {source_path}")
+                else:
+                    self.messenger.warning(f"Configured file not found: {source_path}")
+        
+        return publishable_files
 
     def load_all_services(self) -> Dict:
         """Load all available services from JSON files"""
@@ -58,6 +97,51 @@ class ServiceManager:
 
         return True
 
+
+    def handle_service_files(self, service_name: str, version: str, service_config: dict) -> None:
+        """Handle service configuration files based on service configuration"""
+        if 'files' not in service_config:
+            return
+
+        service_dir = os.path.join('services', service_name)
+        dockit_dir = os.path.join('dockit', f"{service_name}-{version}")
+
+        # Ensure dockit directory exists
+        os.makedirs(dockit_dir, exist_ok=True)
+
+        # Initialize volumes list if not exists
+        if 'volumes' not in service_config['compose']:
+            service_config['compose']['volumes'] = []
+
+        # Only process files that are explicitly defined in the files object
+        for file_name, file_config in service_config['files'].items():
+            # Get source and destination paths
+            source_path = file_config['source'].format(version=version)
+            destination_path = file_config['destination']
+            
+            # Construct full source path
+            full_source_path = os.path.join(service_dir, source_path)
+            
+            # If file exists
+            if os.path.exists(full_source_path):
+                # Create target directory in dockit
+                target_dir = os.path.dirname(os.path.join(dockit_dir, file_name))
+                os.makedirs(target_dir, exist_ok=True)
+                
+                # Copy file
+                target_file = os.path.join(dockit_dir, file_name)
+                with open(full_source_path, 'r') as src, open(target_file, 'w') as dst:
+                    dst.write(src.read())
+                
+                # Add volume mapping with relative path
+                relative_target = os.path.join('./dockit', f"{service_name}-{version}", file_name)
+                service_config['compose']['volumes'].append(
+                    f"{relative_target}:{destination_path}"
+                )
+                self.messenger.info(f"Added file mapping: {relative_target} → {destination_path}")
+            else:
+                self.messenger.warning(f"File not found: {full_source_path}")
+
     def resolve_service_configs(self, selected_services: Dict[str, str]) -> Dict[str, dict]:
         """Resolve and validate service configurations for selected services and versions"""
         resolved = {}
@@ -72,6 +156,9 @@ class ServiceManager:
             if not self.validate_service_config(service_name, service_config):
                 self.messenger.error(f"Invalid configuration for {service_name} version {version}.")
                 return None
+
+            # Handle service files
+            self.handle_service_files(service_name, version, service_config)
 
             resolved[service_name] = service_config
 
