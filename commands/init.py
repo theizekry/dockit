@@ -1,39 +1,25 @@
 import questionary
 from rich import print
-import json
-import os
 from utilities.messenger import Messenger
+from utilities.service_manager import ServiceManager
 from commands.generator import Generator
 
 class InitCommand:
     def __init__(self):
         self.messenger = Messenger()
-        self.services = self.load_services()
-
-    def load_services(self) -> dict:
-        """Load all available services from JSON files"""
-        services = {}
-        services_dir = "services"
-        
-        for service_name in os.listdir(services_dir):
-            service_path = os.path.join(services_dir, service_name, "service.json")
-            if os.path.exists(service_path):
-                with open(service_path, 'r') as f:
-                    services[service_name] = json.load(f)
-        
-        return services
+        self.service_manager = ServiceManager()
 
     def run(self):
         self.messenger.info(f" 🛠 dockit init")
 
-        selected_services = self.collect_services()
+        selected_services = self.service_manager.collect_services()
         if not selected_services:
             self.messenger.warning("No services selected. Exiting.")
             return
 
-        selected_versions = self.collect_versions(selected_services)
+        selected_versions = self.service_manager.collect_versions(selected_services)
 
-        confirmed = self.show_summary(selected_versions)
+        confirmed = self.service_manager.show_summary(selected_versions)
         if not confirmed:
             self.messenger.warning("Operation cancelled.")
             return
@@ -43,7 +29,7 @@ class InitCommand:
         generator.run()
 
     def collect_services(self):
-        all_services = list(self.services.keys())
+        all_services = list(self.service_manager.services.keys())
         return questionary.checkbox(
             "Select services to include:",
             choices=all_services
@@ -52,7 +38,7 @@ class InitCommand:
     def collect_versions(self, selected_services):
         selected_versions = {}
         for service in selected_services:
-            versions = list(self.services[service].keys())
+            versions = self.service_manager.get_service_versions(service)
             version = questionary.select(
                 f"Select version for {service}:", choices=versions
             ).ask()

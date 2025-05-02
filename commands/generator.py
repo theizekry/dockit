@@ -1,5 +1,6 @@
 from utilities.messenger import Messenger
 from utilities.debugger import Debugger
+from utilities.service_manager import ServiceManager
 import os
 import json
 from jinja2 import Environment, FileSystemLoader
@@ -12,6 +13,7 @@ class Generator:
         """
         self.selected_services = selected_services
         self.messenger = Messenger()
+        self.service_manager = ServiceManager()
         self.env = Environment(
             loader=FileSystemLoader('templates'),
             trim_blocks=True,
@@ -19,68 +21,21 @@ class Generator:
         )
 
         # Add custom dd filter
-        self.env.filters['dd']   = Debugger.dd
-        #self.env.filters['dd'] = Debugger.dump
+        self.env.filters['dd'] = Debugger.dd
 
     def run(self):
         self.messenger.sweet("🛠 Starting generation...")
 
-        resolved = self.resolve_selected_services()
+        resolved = self.service_manager.resolve_service_configs(self.selected_services)
 
-        if not self.validate_services(resolved):
+        if not resolved:
             self.messenger.error("❌ Service validation failed. Please check your service configurations.")
             return
 
         self.generate_docker_compose(resolved)
         self.messenger.success("✅ Docker Compose file generated successfully!")
 
-    def resolve_selected_services(self) -> dict:
-        """Load service configurations from JSON files"""
-        resolved = {}
-        for service_name, version in self.selected_services.items():
-            service_path = f"services/{service_name}/service.json"
-            if not os.path.exists(service_path):
-                self.messenger.error(f"❌ Service configuration not found: {service_path}")
-                continue
-
-            with open(service_path, 'r') as f:
-                service_config = json.load(f)
-                if version not in service_config:
-                    self.messenger.error(f"❌ Version {version} not found for service {service_name}")
-                    continue
-
-                resolved[service_name] = service_config[version]
-
-        return resolved
-
-    def validate_services(self, services: dict) -> bool:
-        """Validate service configurations against their requirements"""
-        for service_name, service_config in services.items():
-            self.messenger.info(f"Validating {service_name} configuration...")
-
-            # Check if service has either build or image
-            if 'build' not in service_config and 'image' not in service_config:
-                self.messenger.error(f"❌ {service_name} must have either 'build' or 'image' configuration")
-                return False
-
-            # Validate build configuration if present
-            if 'build' in service_config:
-                build = service_config['build']
-                required_build_fields = ['base_image', 'command']
-                for field in required_build_fields:
-                    if field not in build:
-                        self.messenger.error(f"❌ {service_name} build configuration is missing required field: {field}")
-                        return False
-
-            # Validate compose configuration
-            if 'compose' not in service_config:
-                self.messenger.error(f"❌ {service_name} is missing 'compose' configuration")
-                return False
-
-        return True
-
     def generate_docker_compose(self, services: dict):
-        
         """Generate docker-compose.yml file based on selected services"""
         try:
             # Get current directory name as project name
