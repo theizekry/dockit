@@ -45,6 +45,7 @@
             "command": ["/bin/bash", "-c", "php-fpm -y /usr/local/etc/php-fpm.conf -R"]
         },
         "compose": {
+            
             "extra_hosts": ["abc.efg"],
             "volumes": ["./:/var/www/html"],
             "environment": [

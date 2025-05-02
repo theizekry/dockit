@@ -80,15 +80,18 @@ class Generator:
         return True
 
     def generate_docker_compose(self, services: dict):
+        
         """Generate docker-compose.yml file based on selected services"""
         try:
             # Get current directory name as project name
             project_name = os.path.basename(os.getcwd())
             # Convert to slug format (lowercase, replace spaces with dashes)
             project_name = project_name.lower().replace(' ', '-')
-            
+
             # Generate Dockerfiles and update compose configuration
             for service_name, service_config in services.items():
+                service_config['image'] = f"dockit-{service_name}-{self.selected_services[service_name]}"
+
                 if 'build' in service_config:
                     # Generate Dockerfile
                     self.generate_dockerfile(service_name, service_config)
@@ -98,10 +101,7 @@ class Generator:
                         'context': f"./dockit/{service_name}-{service_config['build']['base_image'].split(':')[1]}",
                         'dockerfile': "Dockerfile"
                     }
-                else:
-                    # Use direct image
-                    service_config['compose']['image'] = service_config['image']
-            
+
             # Render docker-compose template
             template = self.env.get_template('docker-compose.yml.j2')
             output = template.render(

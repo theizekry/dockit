@@ -3,12 +3,11 @@ name: {{ project_name }}
 services:
 {% for service_name, service_config in services.items() %}
   {{ service_name }}:
+    image: {{ service_config.image }}
     {% if 'build' in service_config.compose %}
     build:
       context: {{ service_config.compose.build.context }}
       dockerfile: {{ service_config.compose.build.dockerfile }}
-    {% else %}
-    image: {{ service_config.image }}
     {% endif %}
     {% if 'restart' in service_config.compose %}
     restart: {{ service_config.compose.restart }}
