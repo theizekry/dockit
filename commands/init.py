@@ -2,7 +2,7 @@ import questionary
 from rich import print
 import json
 import os
-from assets.messenger import Messenger
+from utilities.messenger import Messenger
 from commands.generator import Generator
 
 class InitCommand:

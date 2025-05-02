@@ -1,5 +1,5 @@
-from assets.messenger import Messenger
-from assets.debugger import Debugger
+from utilities.messenger import Messenger
+from utilities.debugger import Debugger
 import os
 import json
 from jinja2 import Environment, FileSystemLoader
