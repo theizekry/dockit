@@ -4,7 +4,6 @@ from utilities.service_manager import ServiceManager
 import os
 import json
 from jinja2 import Environment, FileSystemLoader
-import click
 
 class Generator:
     def __init__(self, selected_services: dict):
@@ -24,7 +23,7 @@ class Generator:
         self.env.filters['dd'] = Debugger.dd
 
     def run(self):
-        self.messenger.sweet("🛠 Starting generation...")
+        self.messenger.sweet("[+] Starting generation...")
 
         resolved = self.service_manager.resolve_service_configs(self.selected_services)
 
@@ -33,7 +32,7 @@ class Generator:
             return
 
         self.generate_docker_compose(resolved)
-        self.messenger.success("✅ Docker Compose file generated successfully!")
+        self.messenger.success("Docker Compose file generated successfully!")
 
     def generate_docker_compose(self, services: dict):
         """Generate docker-compose.yml file based on selected services"""
@@ -71,9 +70,9 @@ class Generator:
             with open('docker-compose.yml', 'w') as f:
                 f.write(output)
             
-            click.echo(click.style('✓ Generated docker-compose.yml', fg='green'))
+            self.messenger.info('Generated docker-compose.yml')
         except Exception as e:
-            click.echo(click.style(f'Error generating docker-compose.yml: {str(e)}', fg='red'))
+            self.messenger.error(f'Error generating docker-compose.yml: {str(e)}')
 
     def generate_dockerfile(self, service_name: str, service_config: dict):
         """Generate Dockerfile for a service"""
@@ -95,6 +94,6 @@ class Generator:
             with open(f"{build_dir}/Dockerfile", 'w') as f:
                 f.write(dockerfile)
             
-            click.echo(click.style(f'✓ Generated Dockerfile for {service_name}', fg='green'))
+            self.messenger.info(f'Generated Dockerfile for {service_name}')
         except Exception as e:
-            click.echo(click.style(f'Error generating Dockerfile for {service_name}: {str(e)}', fg='red'))
+            self.messenger.error(f'Error generating Dockerfile for {service_name}: {str(e)}')

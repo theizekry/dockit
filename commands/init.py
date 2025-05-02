@@ -10,7 +10,7 @@ class InitCommand:
         self.service_manager = ServiceManager()
 
     def run(self):
-        self.messenger.info(f" 🛠 dockit init")
+        self.messenger.info(f"Dockit init")
 
         selected_services = self.service_manager.collect_services()
         if not selected_services:

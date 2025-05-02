@@ -1,13 +1,16 @@
 import os
 import json
 from typing import Dict, Optional, List
+from questionary import Choice
 import questionary
-from rich import print
+from utilities.messenger import Messenger
 
 class ServiceManager:
     def __init__(self):
         self.services_dir = "services"
         self.services = self.load_all_services()
+        self.messenger = Messenger()
+
 
     def load_all_services(self) -> Dict:
         """Load all available services from JSON files"""
@@ -21,11 +24,13 @@ class ServiceManager:
         
         return services
 
+
     def get_service_versions(self, service_name: str) -> Optional[list]:
         """Get all available versions for a specific service"""
         if service_name in self.services:
             return list(self.services[service_name].keys())
         return None
+
 
     def get_service_config(self, service_name: str, version: str) -> Optional[dict]:
         """Get configuration for a specific service version"""
@@ -62,13 +67,29 @@ class ServiceManager:
                 resolved[service_name] = service_config
         return resolved
 
+
     def collect_services(self) -> List[str]:
         """Collect user-selected services"""
-        all_services = list(self.services.keys())
+        # Format service names to be more user-friendly
+        formatted_services = {
+            service: service.upper() if len(service) <= 4 else service.capitalize()
+            for service in self.services.keys()
+        }
+        
+        # Create choices with formatted names but return original service names
+        choices = [
+            Choice(
+                title=formatted_name,
+                value=original_name
+            )
+            for original_name, formatted_name in formatted_services.items()
+        ]
+        
         return questionary.checkbox(
             "Select services to include:",
-            choices=all_services
+            choices=choices
         ).ask()
+
 
     def collect_versions(self, selected_services: List[str]) -> Dict[str, str]:
         """Collect versions for selected services"""
@@ -81,9 +102,10 @@ class ServiceManager:
             selected_versions[service] = version
         return selected_versions
 
+
     def show_summary(self, selected_versions: Dict[str, str]) -> bool:
         """Show summary of selected services and versions"""
-        print("Selected configuration:")
+        self.messenger.info("Selected configuration:")
         for service, version in selected_versions.items():
-            print(f"• {service} → {version}")
+            self.messenger.info(f"• {service} → {version}")
         return questionary.confirm("Proceed with generating configuration?", default=True).ask() 
