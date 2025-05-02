@@ -38,7 +38,8 @@
             ],
             "copies": [
                 "COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/",
-                "COPY --from=composer:latest /usr/bin/composer /usr/bin/composer"
+                "COPY --from=composer:latest /usr/bin/composer /usr/bin/composer",
+                "COPY ./xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini"
             ],
             "working_dir": "/var/www/html",
             "command": ["/bin/bash", "-c", "php-fpm -y /usr/local/etc/php-fpm.conf -R"]
@@ -46,7 +47,6 @@
         "compose": {
             "extra_hosts": ["abc.efg"],
             "volumes": ["./:/var/www/html"],
-            "ports": ["9000:9000"],
             "environment": [
                 "PHP_FPM_USER=www-data",
                 "PHP_FPM_GROUP=www-data"
@@ -57,8 +57,7 @@
         "image": "php:8.4-fpm",
         "compose": {
             "restart": "always",
-            "volumes": ["./:/var/www/html"],
-            "ports": ["9000:9000"],
+            "volumes": ["./:/var/www/html"],      
             "environment": [
                 "PHP_FPM_USER=www-data",
                 "PHP_FPM_GROUP=www-data"
