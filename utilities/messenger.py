@@ -8,10 +8,10 @@ class Messenger:
         rprint(f"[green]✓ {msg}[/green]")
 
     def warning(self, msg: str):
-        rprint(f"[yellow]⚠️  {msg}[/yellow]")
+        rprint(f"[yellow][!] {msg}[/yellow]")
 
     def error(self, msg: str):
-        rprint(f"[bold red]❌ {msg}[/bold red]")
+        rprint(f"[bold red][-] {msg}[/bold red]")
 
     def note(self, msg: str):
         rprint(f"[white]{msg}[/white]")

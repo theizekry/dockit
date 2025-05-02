@@ -62,9 +62,19 @@ class ServiceManager:
         """Resolve and validate service configurations for selected services and versions"""
         resolved = {}
         for service_name, version in selected_services.items():
+            # Get service config
             service_config = self.get_service_config(service_name, version)
-            if service_config and self.validate_service_config(service_name, service_config):
-                resolved[service_name] = service_config
+            if not service_config:
+                self.messenger.error(f"Service configuration not found for {service_name} version {version}")
+                return None
+
+            # Validate service config
+            if not self.validate_service_config(service_name, service_config):
+                self.messenger.error(f"Invalid configuration for {service_name} version {version}.")
+                return None
+
+            resolved[service_name] = service_config
+
         return resolved
 
 

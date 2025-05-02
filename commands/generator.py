@@ -25,10 +25,10 @@ class Generator:
     def run(self):
         self.messenger.sweet("[+] Starting generation...")
 
+        # Validate and resolve services before generation
         resolved = self.service_manager.resolve_service_configs(self.selected_services)
-
-        if not resolved:
-            self.messenger.error("❌ Service validation failed. Please check your service configurations.")
+        if resolved is None:  # Explicitly check for None to handle validation failures
+            self.messenger.error("Service validation failed. Operation cancelled.")
             return
 
         self.generate_docker_compose(resolved)
