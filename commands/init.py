@@ -1,12 +1,27 @@
 import questionary
 from rich import print
-from configs.services import SERVICES
+import json
+import os
 from assets.messenger import Messenger
 from commands.generator import Generator
 
 class InitCommand:
     def __init__(self):
         self.messenger = Messenger()
+        self.services = self.load_services()
+
+    def load_services(self) -> dict:
+        """Load all available services from JSON files"""
+        services = {}
+        services_dir = "services"
+        
+        for service_name in os.listdir(services_dir):
+            service_path = os.path.join(services_dir, service_name, "service.json")
+            if os.path.exists(service_path):
+                with open(service_path, 'r') as f:
+                    services[service_name] = json.load(f)
+        
+        return services
 
     def run(self):
         self.messenger.info(f" 🛠 dockit init")
@@ -28,23 +43,21 @@ class InitCommand:
         generator.run()
 
     def collect_services(self):
-        all_services = list(SERVICES.keys())
+        all_services = list(self.services.keys())
         return questionary.checkbox(
             "Select services to include:",
             choices=all_services
         ).ask()
 
-
     def collect_versions(self, selected_services):
         selected_versions = {}
         for service in selected_services:
-            versions = list(SERVICES[service].keys())
+            versions = list(self.services[service].keys())
             version = questionary.select(
                 f"Select version for {service}:", choices=versions
             ).ask()
             selected_versions[service] = version
         return selected_versions
-
 
     def show_summary(self, selected_versions):
         self.messenger.success("Selected configuration:")

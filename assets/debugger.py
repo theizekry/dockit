@@ -14,3 +14,9 @@ class Debugger:
         if msg:
             print(msg)
         sys.exit()
+
+    @staticmethod
+    def dump(*args):
+        for arg in args:
+            pprint.pprint(arg)
+            print()

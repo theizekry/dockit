@@ -1,0 +1,25 @@
+{
+    "latest": {
+        "compose": {
+            "extra_hosts": ["abc.efg"],
+            "volumes": ["./:/var/www/html"],
+            "ports": ["9000:9000"],
+            "environment": [
+                "PHP_FPM_USER=www-data",
+                "PHP_FPM_GROUP=www-data"
+            ]
+        }
+    },
+    "8.4": {
+        "image": "php:8.4-fpm",
+        "compose": {
+            "restart": "always",
+            "volumes": ["./:/var/www/html"],
+            "ports": ["9000:9000"],
+            "environment": [
+                "PHP_FPM_USER=www-data",
+                "PHP_FPM_GROUP=www-data"
+            ]
+        }
+    }
+} 

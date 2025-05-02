@@ -1,0 +1,42 @@
+name: {{ project_name }}
+
+services:
+{% for service_name, service_config in services.items() %}
+  {{ service_name }}:
+    {% if 'build' in service_config.compose %}
+    build: {{ service_config.compose.build }}
+    {% else %}
+    image: {{ service_config.image }}
+    {% endif %}
+    {% if 'restart' in service_config.compose %}
+    restart: {{ service_config.compose.restart }}
+    {% endif %}
+    {% if 'ports' in service_config.compose %}
+    ports:
+      {% for port in service_config.compose.ports %}
+      - "{{ port }}"
+      {% endfor %}
+    {% endif %}
+    {% if 'volumes' in service_config.compose %}
+    volumes:
+      {% for volume in service_config.compose.volumes %}
+      - {{ volume }}
+      {% endfor %}
+    {% endif %}
+    {% if 'environment' in service_config.compose %}
+    environment:
+      {% for env in service_config.compose.environment %}
+      - {{ env }}
+      {% endfor %}
+    {% endif %}
+    {% if 'extra_hosts' in service_config.compose %}
+    extra_hosts:
+      {% for host in service_config.compose.extra_hosts %}
+      - {{ host }}
+      {% endfor %}
+    {% endif %}
+    {% if 'working_dir' in service_config.compose %}
+    working_dir: {{ service_config.compose.working_dir }}
+    {% endif %}
+
+{% endfor %}

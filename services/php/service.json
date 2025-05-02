@@ -1,0 +1,68 @@
+{
+    "8.1": {
+        "build": {
+            "base_image": "php:8.1-fpm",
+            "apt": [
+                "git",
+                "curl",
+                "libonig-dev",
+                "libxml2-dev",
+                "libpng-dev",
+                "libjpeg-dev",
+                "libwebp-dev",
+                "libxpm-dev",
+                "libjpeg62-turbo-dev",
+                "libfreetype6-dev",
+                "libmcrypt-dev",
+                "libgd-dev",
+                "jpegoptim",
+                "optipng",
+                "pngquant",
+                "gifsicle",
+                "zip",
+                "libzip-dev",
+                "unzip",
+                "default-mysql-client",
+                "libldb-dev",
+                "libldap2-dev",
+                "libicu-dev",
+                "libssl-dev",
+                "openssl"
+            ],
+            "run": [
+                "RUN docker-php-ext-install pdo pdo_mysql bcmath mbstring exif pcntl opcache intl zip gd xdebug",
+                "RUN docker-php-source delete",
+                "RUN apt-get clean && rm -rf /var/lib/apt/lists/*",
+                "RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg",
+                "RUN docker-php-ext-install -j$(nproc) gd"
+            ],
+            "copies": [
+                "COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/",
+                "COPY --from=composer:latest /usr/bin/composer /usr/bin/composer"
+            ],
+            "working_dir": "/var/www/html",
+            "command": ["/bin/bash", "-c", "php-fpm -y /usr/local/etc/php-fpm.conf -R"]
+        },
+        "compose": {
+            "extra_hosts": ["abc.efg"],
+            "volumes": ["./:/var/www/html"],
+            "ports": ["9000:9000"],
+            "environment": [
+                "PHP_FPM_USER=www-data",
+                "PHP_FPM_GROUP=www-data"
+            ]
+        }
+    },
+    "8.4": {
+        "image": "php:8.4-fpm",
+        "compose": {
+            "restart": "always",
+            "volumes": ["./:/var/www/html"],
+            "ports": ["9000:9000"],
+            "environment": [
+                "PHP_FPM_USER=www-data",
+                "PHP_FPM_GROUP=www-data"
+            ]
+        }
+    }
+} 
