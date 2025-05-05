@@ -1,16 +1,19 @@
 import typer
 from commands.init import InitCommand
 from commands.add_service import AddServiceCommand
+from commands.delete_service import DeleteServiceCommand
 
 class DockitCLI:
     def __init__(self):
         self.app = typer.Typer()
         self.init_cmd = InitCommand()
         self.add_service_cmd = AddServiceCommand()
+        self.delete_service_cmd = DeleteServiceCommand()
 
         # Register the CLI commands
         self.app.command("init")(self.init_cmd.run)
         self.app.command("add-service")(self.add_service_cmd.run)
+        self.app.command("delete-service")(self.delete_service_cmd.run)
 
 def main():
     DockitCLI().app()
