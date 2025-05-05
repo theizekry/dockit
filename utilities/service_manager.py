@@ -1,21 +1,35 @@
 import os
 import json
+import sys
+from pathlib import Path
 from typing import Dict, Optional, List
 from questionary import Choice
 import questionary
 from utilities.messenger import Messenger
 import fnmatch
 
+def get_resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 class ServiceManager:
     def __init__(self):
-        self.services_dir = "services"
-        self.services = self.load_all_services()
+        self.services = {}
+        self.services_dir = get_resource_path("services")
+        self.templates_dir = get_resource_path("templates")
+        self.load_all_services()
         self.messenger = Messenger()
 
     def get_container_path(self, service_name: str, filename: str) -> str:
         """Get container path for a file based on service configuration"""
         
-        service_config = self.service_paths[service_name]
+        service_config = self.services[service_name]
         
         # Check for exact matches first
         if filename in service_config['file_patterns']:
@@ -51,25 +65,36 @@ class ServiceManager:
         
         return publishable_files
 
-    def load_all_services(self) -> Dict:
-        """Load all available services from JSON files"""
-        services = {}
-        
-        for service_name in os.listdir(self.services_dir):
-            service_path = os.path.join(self.services_dir, service_name, "service.json")
-            if os.path.exists(service_path):
-                with open(service_path, 'r') as f:
-                    services[service_name] = json.load(f)
-        
-        return services
+    def load_all_services(self):
+        """Load all services from the services directory"""
+        if not os.path.exists(self.services_dir):
+            os.makedirs(self.services_dir, exist_ok=True)
+            return
 
+        for service_name in os.listdir(self.services_dir):
+            service_dir = os.path.join(self.services_dir, service_name)
+            if os.path.isdir(service_dir):
+                service_json = os.path.join(service_dir, "service.json")
+                if os.path.exists(service_json):
+                    with open(service_json, "r") as f:
+                        self.services[service_name] = json.load(f)
+
+    def get_service(self, service_name):
+        """Get service configuration"""
+        return self.services.get(service_name)
+
+    def get_service_version(self, service_name, version):
+        """Get specific version of a service"""
+        service = self.get_service(service_name)
+        if service and version in service:
+            return service[version]
+        return None
 
     def get_service_versions(self, service_name: str) -> Optional[list]:
         """Get all available versions for a specific service"""
         if service_name in self.services:
             return list(self.services[service_name].keys())
         return None
-
 
     def get_service_config(self, service_name: str, version: str) -> Optional[dict]:
         """Get configuration for a specific service version"""
@@ -96,7 +121,6 @@ class ServiceManager:
             return False
 
         return True
-
 
     def handle_service_files(self, service_name: str, version: str, service_config: dict) -> None:
         """Handle service configuration files based on service configuration"""
@@ -164,7 +188,6 @@ class ServiceManager:
 
         return resolved
 
-
     def collect_services(self) -> List[str]:
         """Collect user-selected services"""
         # Format service names to be more user-friendly
@@ -187,7 +210,6 @@ class ServiceManager:
             choices=choices
         ).ask()
 
-
     def collect_versions(self, selected_services: List[str]) -> Dict[str, str]:
         """Collect versions for selected services"""
         selected_versions = {}
@@ -198,7 +220,6 @@ class ServiceManager:
             ).ask()
             selected_versions[service] = version
         return selected_versions
-
 
     def show_summary(self, selected_versions: Dict[str, str]) -> bool:
         """Show summary of selected services and versions"""
