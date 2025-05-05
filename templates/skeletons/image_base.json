@@ -1,0 +1,19 @@
+{
+    "version": {
+        "image": "",
+        "compose": {
+            "volumes": [],      
+            "environment": []
+        },
+        "files": {
+            "filename": {
+                "source": "",
+                "destination": ""
+            },
+            "filename2": {
+                "source": "",
+                "destination": ""
+            }
+        }
+    }
+} 

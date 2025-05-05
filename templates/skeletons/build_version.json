@@ -1,0 +1,24 @@
+{
+   "version": {
+    "build": {
+        "context": ".",
+        "dockerfile": "Dockerfile",
+        "args": {}
+    },
+    "compose": {
+        "ports": [],
+        "volumes": [],
+        "environment": []
+    },
+    "files": {
+        "filename": {
+            "source": "",
+            "destination": ""
+        },
+        "filename2": {
+            "source": "",
+            "destination": ""
+        }
+    }
+   }
+} 
