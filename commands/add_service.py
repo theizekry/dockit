@@ -4,13 +4,14 @@ import sys
 import questionary
 from utilities.messenger import Messenger
 from utilities.service_manager import ServiceManager
+from utilities.path_resolver import PathResolver
 
 class AddServiceCommand:
     def __init__(self):
         self.messenger = Messenger()
         self.service_manager = ServiceManager()
-        self.services_dir = "services"
-        self.templates_dir = "templates/skeletons"
+        self.services_dir = PathResolver.get_services_dir()
+        self.templates_dir = PathResolver.get_templates_dir()
 
     def run(self):
         try:
@@ -45,7 +46,8 @@ class AddServiceCommand:
 
             # Load skeleton template
             skeleton_file = "image_base.json" if version_type == "direct" else "build_version.json"
-            with open(os.path.join(self.templates_dir, skeleton_file), "r") as f:
+            skeleton_path = os.path.join(self.templates_dir, "skeletons", skeleton_file)
+            with open(skeleton_path, "r") as f:
                 skeleton = json.load(f)
 
             # Create or update service.json

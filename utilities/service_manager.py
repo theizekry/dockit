@@ -9,6 +9,7 @@ import questionary
 from utilities.messenger import Messenger
 import fnmatch
 from utilities.debugger import Debugger
+from utilities.path_resolver import PathResolver
 
 def get_resource_path(relative_path):
     """Get absolute path to resource, works for dev and for PyInstaller"""
@@ -20,15 +21,14 @@ def get_resource_path(relative_path):
 class ServiceManager:
     def __init__(self):
         self.services = {}
-        self.services_dir = get_resource_path("services")
-        self.templates_dir = get_resource_path("templates")
+        self.services_dir = PathResolver.get_services_dir()
+        self.templates_dir = PathResolver.get_templates_dir()
         self.messenger = Messenger()
 
     def initialize_services(self):
         """Initialize services directory and copy predefined services on first run"""
         # Get the base .dockit directory path
-
-        dockit_base_dir = os.path.expanduser("~/.dockit")
+        dockit_base_dir = PathResolver.get_home_dir()
         
         # Check if this is first run by looking for .dockit directory
         if os.path.exists(dockit_base_dir):
@@ -38,15 +38,8 @@ class ServiceManager:
         os.makedirs(self.services_dir, exist_ok=True)
         os.makedirs(self.templates_dir, exist_ok=True)
 
-        # Get the path to predefined services
-        try:
-            # Try to get predefined services from PyInstaller
-            predefined_services_path = os.path.join(sys._MEIPASS, "services")
-        except Exception:
-            # If not running in PyInstaller, use the local services directory
-            predefined_services_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "services")
-
-        # Copy predefined services if they exist
+        # Copy predefined services
+        predefined_services_path = PathResolver.get_predefined_services_path()
         if os.path.exists(predefined_services_path):
             for service_name in os.listdir(predefined_services_path):
                 source_path = os.path.join(predefined_services_path, service_name)
@@ -57,6 +50,22 @@ class ServiceManager:
                         shutil.rmtree(target_path)
                     shutil.copytree(source_path, target_path)
                     self.messenger.info(f"Published predefined service: {service_name}")
+
+        # Copy predefined templates
+        predefined_templates_path = PathResolver.get_predefined_templates_path()
+        if os.path.exists(predefined_templates_path):
+            for template_name in os.listdir(predefined_templates_path):
+                source_path = os.path.join(predefined_templates_path, template_name)
+                target_path = os.path.join(self.templates_dir, template_name)
+                
+                if os.path.isdir(source_path):
+                    if os.path.exists(target_path):
+                        shutil.rmtree(target_path)
+                    shutil.copytree(source_path, target_path)
+                    self.messenger.info(f"Published predefined template: {template_name}")
+                elif os.path.isfile(source_path):
+                    shutil.copy2(source_path, target_path)
+                    self.messenger.info(f"Published predefined template file: {template_name}")
         
         self.load_all_services()  # Reload services after initialization
         return True

@@ -5,12 +5,13 @@ import shutil
 import questionary
 from utilities.messenger import Messenger
 from utilities.service_manager import ServiceManager
+from utilities.path_resolver import PathResolver
 
 class DeleteServiceCommand:
     def __init__(self):
         self.messenger = Messenger()
         self.service_manager = ServiceManager()
-        self.services_dir = "services"
+        self.services_dir = PathResolver.get_services_dir()
 
     def run(self):
         try:
