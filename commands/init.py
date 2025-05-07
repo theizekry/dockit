@@ -8,9 +8,10 @@ class InitCommand:
     def __init__(self):
         self.messenger = Messenger()
         self.service_manager = ServiceManager()
-
+        self.service_manager.initialize_services()
+        self.service_manager.load_all_services()
     def run(self):
-        self.messenger.info(f"Dockit init")
+        self.messenger.info("Dockit init")
 
         selected_services = self.service_manager.collect_services()
         if not selected_services:
