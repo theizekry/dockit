@@ -1,10 +1,12 @@
 {
    "version": {
     "build": {
+        "base_image": "",
         "copies": [],
         "apt": [],
         "run": [],
-        "working_dir": ""
+        "working_dir": "",
+        "command": ""
     },
     "compose": {
         "ports": [],
