@@ -1,35 +1,57 @@
 {
     "8.4": {
-        "image": "php:8.4-fpm",
+        "build": {
+            "base_image": "php:8.4-fpm",
+            "copies": [
+                "--from=composer:latest /usr/bin/composer /usr/bin/composer",
+                "--from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/",
+                "./xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini"
+            ],
+            "apt": [
+                "git",
+                "curl",
+                "libonig-dev",
+                "libxml2-dev",
+                "libpng-dev",
+                "libjpeg-dev",
+                "libwebp-dev",
+                "libxpm-dev",
+                "libjpeg62-turbo-dev",
+                "libfreetype6-dev",
+                "libmcrypt-dev",
+                "libgd-dev",
+                "jpegoptim optipng pngquant gifsicle",
+                "zip",
+                "libzip-dev",
+                "unzip",
+                "default-mysql-client",
+                "libldb-dev",
+                "libldap2-dev",
+                "libicu-dev"
+            ],
+            "run": [
+                "docker-php-source delete",
+                "apt-get clean && rm -rf /var/lib/apt/lists/*",
+                "docker-php-ext-install pdo_mysql",
+                "docker-php-ext-install mbstring",
+                "docker-php-ext-install exif",
+                "docker-php-ext-install pcntl",
+                "docker-php-ext-install bcmath",
+                "docker-php-ext-install opcache",
+                "docker-php-ext-install intl",
+                "docker-php-ext-install zip",
+                "docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg",
+                "docker-php-ext-install -j$(nproc) gd zip",
+                "install-php-extensions xdebug"
+            ],
+            "working_dir": "/var/www/html",
+            "command": "php-fpm -y /usr/local/etc/php-fpm.conf -R"
+        },
         "compose": {
-            "restart": "always",
+            "context": ".",
+            "dockerfile": "Dockerfile",
             "volumes": [
                 "./:/var/www/html"
-            ],
-            "environment": [
-                "PHP_FPM_USER=www-data",
-                "PHP_FPM_GROUP=www-data"
-            ]
-        },
-        "publishes": {
-            "php.ini": {
-                "source": "conf/{version}/php.ini",
-                "destination": "/usr/local/etc/php/php.ini"
-            },
-            "xdebug.ini": {
-                "source": "conf/{version}/xdebug.ini",
-                "destination": "/usr/local/etc/php/conf.d/xdebug.ini"
-            }
-        }
-    },
-    "8.2": {
-        "build": {
-            "base_image": "php:8.2-fpm-alpine",
-            "command": "php-fpm"
-        },
-        "compose": {
-            "ports": [
-                "9000:9000"
             ]
         },
         "publishes": {

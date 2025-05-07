@@ -1,4 +1,5 @@
 FROM {{ build.base_image }}
+SHELL ["/bin/bash", "-c"]
 
 {% for arg, value in compose.args %}
 ARG {{ arg }}={{ value }}
