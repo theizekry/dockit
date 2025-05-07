@@ -8,10 +8,12 @@ services:
     build:
       context: {{ service_config.compose.context }}
       dockerfile: {{ service_config.compose.dockerfile }}
+      {% if service_config.compose.args is defined and service_config.compose.args|length > 0 %}
       args:
         {% for arg, value in service_config.compose.args %}
         - {{ arg }}={{ value }}
         {% endfor %}
+      {% endif %}
     {% endif %}
     {% if 'restart' in service_config.compose %}
     restart: {{ service_config.compose.restart }}
