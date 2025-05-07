@@ -10,17 +10,18 @@ class InitCommand:
         self.service_manager = ServiceManager()
         self.service_manager.initialize_services()
         self.service_manager.load_all_services()
+        
     def run(self):
         self.messenger.info("Dockit init")
 
-        selected_services = self.service_manager.collect_services()
+        selected_services = self.collect_services()
         if not selected_services:
             self.messenger.warning("No services selected. Exiting.")
             return
 
-        selected_versions = self.service_manager.collect_versions(selected_services)
+        selected_versions = self.collect_versions(selected_services)
 
-        confirmed = self.service_manager.show_summary(selected_versions)
+        confirmed = self.show_summary(selected_versions)
         if not confirmed:
             self.messenger.warning("Operation cancelled.")
             return

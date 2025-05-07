@@ -19,11 +19,23 @@ def get_resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 class ServiceManager:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(ServiceManager, cls).__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
+
     def __init__(self):
+        if self._initialized:
+            return
+            
         self.services = {}
         self.services_dir = PathResolver.get_services_dir()
         self.templates_dir = PathResolver.get_templates_dir()
         self.messenger = Messenger()
+        self._initialized = True
 
     def initialize_services(self):
         """Initialize services directory and copy predefined services on first run"""
@@ -177,7 +189,7 @@ class ServiceManager:
         dockit_dir = os.path.join('dockit', f"{service_name}-{version}")
 
         # Ensure dockit directory exists
-        os.makedirs(dockit_dir, exist_ok=False)
+        os.makedirs(dockit_dir, exist_ok=True)
 
         # Initialize volumes list if not exists
         if 'volumes' not in service_config['compose']:
