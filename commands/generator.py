@@ -44,9 +44,11 @@ class Generator:
 
             # Generate Dockerfiles and update compose configuration
             for service_name, service_config in services.items():
-                service_config['image'] = f"dockit-{service_name}-{self.selected_services[service_name]}"
 
                 if 'build' in service_config:
+                    # we only need to set the image if the build is defined
+                    service_config['image'] = f"dockit-{service_name}-{self.selected_services[service_name]}"
+
                     # Generate Dockerfile
                     self.generate_dockerfile(service_name, service_config)
                     
