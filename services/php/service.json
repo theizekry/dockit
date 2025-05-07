@@ -3,13 +3,15 @@
         "image": "php:8.4-fpm",
         "compose": {
             "restart": "always",
-            "volumes": ["./:/var/www/html"],      
+            "volumes": [
+                "./:/var/www/html"
+            ],
             "environment": [
                 "PHP_FPM_USER=www-data",
                 "PHP_FPM_GROUP=www-data"
             ]
         },
-        "files": {
+        "publishes": {
             "php.ini": {
                 "source": "conf/{version}/php.ini",
                 "destination": "/usr/local/etc/php/php.ini"
@@ -26,47 +28,11 @@
             "command": "php-fpm"
         },
         "compose": {
-            "ports": ["9000:9000"]
+            "ports": [
+                "9000:9000"
+            ]
         },
-        "files": {
-            "php.ini": {
-                "source": "conf/{version}/php.ini",
-                "destination": "/usr/local/etc/php/php.ini"
-            },
-            "xdebug.ini": {
-                "source": "conf/{version}/xdebug.ini",
-                "destination": "/usr/local/etc/php/conf.d/xdebug.ini"
-            }
-        }
-    },
-    "8.1": {
-        "build": {
-            "base_image": "php:8.1-fpm-alpine",
-            "command": "php-fpm"
-        },
-        "compose": {
-            "ports": ["9000:9000"]
-        },
-        "files": {
-            "php.ini": {
-                "source": "conf/{version}/php.ini",
-                "destination": "/usr/local/etc/php/php.ini"
-            },
-            "xdebug.ini": {
-                "source": "conf/{version}/xdebug.ini",
-                "destination": "/usr/local/etc/php/conf.d/xdebug.ini"
-            }
-        }
-    },
-    "7.4": {
-        "build": {
-            "base_image": "php:7.4-fpm-alpine",
-            "command": "php-fpm"
-        },
-        "compose": {
-            "ports": ["9000:9000"]
-        },
-        "files": {
+        "publishes": {
             "php.ini": {
                 "source": "conf/{version}/php.ini",
                 "destination": "/usr/local/etc/php/php.ini"
@@ -77,4 +43,4 @@
             }
         }
     }
-} 
+}

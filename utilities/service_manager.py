@@ -49,8 +49,8 @@ class ServiceManager:
         service_dir = os.path.join('services', service_name)
         
         # Only process files that are explicitly defined in the files array
-        if 'files' in service_config:
-            for file_name, file_config in service_config['files'].items():
+        if 'publishes' in service_config:
+            for file_name, file_config in service_config['publishes'].items():
                 source_path = file_config['source'].format(version=version)
                 full_source_path = os.path.join(service_dir, source_path)
                 
@@ -124,7 +124,7 @@ class ServiceManager:
 
     def handle_service_files(self, service_name: str, version: str, service_config: dict) -> None:
         """Handle service configuration files based on service configuration"""
-        if 'files' not in service_config:
+        if 'publishes' not in service_config:
             return
 
         service_dir = os.path.join('services', service_name)
@@ -138,7 +138,7 @@ class ServiceManager:
             service_config['compose']['volumes'] = []
 
         # Only process files that are explicitly defined in the files object
-        for file_name, file_config in service_config['files'].items():
+        for file_name, file_config in service_config['publishes'].items():
             # Get source and destination paths
             source_path = file_config['source'].format(version=version)
             destination_path = file_config['destination']

@@ -1,16 +1,20 @@
 {
    "version": {
     "build": {
-        "context": ".",
-        "dockerfile": "Dockerfile",
-        "args": {}
+        "copies": [],
+        "apt": [],
+        "run": [],
+        "working_dir": ""
     },
     "compose": {
         "ports": [],
         "volumes": [],
-        "environment": []
+        "environment": [],
+        "context": ".",
+        "dockerfile": "Dockerfile",
+        "args": {}
     },
-    "files": {
+    "publishes": {
         "filename": {
             "source": "",
             "destination": ""

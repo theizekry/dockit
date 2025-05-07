@@ -52,9 +52,9 @@ class Generator:
                     
                     # Update compose.build using only the version number
                     version = service_config['build']['base_image'].split(':')[1].split('-')[0]
-                    service_config['compose']['build'] = {
+                    service_config['build'] = {
                         'context': f"./dockit/{service_name}-{version}",
-                        'dockerfile': "Dockerfile"
+                        'dockerfile': "Dockerfile",
                     }
 
                 # Handle publishable files
@@ -99,7 +99,8 @@ class Generator:
             # Render the Dockerfile template
             template = self.env.get_template(template_path)
             dockerfile = template.render(
-                build=service_config['build']
+                build=service_config['build'],
+                compose=service_config['compose']
             )
             
             # Create build directory using only the version number

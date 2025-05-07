@@ -1,5 +1,10 @@
 FROM {{ build.base_image }}
 
+{% for arg, value in compose.args %}
+ARG {{ arg }}={{ value }}
+{% endfor %}
+
+
 # Install system dependencies
 RUN apt-get update
 

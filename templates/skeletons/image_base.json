@@ -2,10 +2,11 @@
     "version": {
         "image": "",
         "compose": {
+            "ports": [],
             "volumes": [],      
             "environment": []
         },
-        "files": {
+        "publishes": {
             "filename": {
                 "source": "",
                 "destination": ""
