@@ -3,8 +3,8 @@ name: {{ project_name }}
 services:
 {% for service_name, service_config in services.items() %}
   {{ service_name }}:
-    hostname: {{ service_name }}
-    container_name: {{ service_name }}
+    hostname: {{ project_name }}_{{ service_name }}
+    container_name: {{ project_name }}_{{ service_name }}
     image: {{ service_config.image }}
     {% if service_config.build is defined and service_config.compose is defined and service_config.compose.context is defined and service_config.compose.dockerfile is defined %}
     build:
@@ -35,7 +35,7 @@ services:
     {% if 'environment' in service_config.compose %}
     environment:
       {% for env in service_config.compose.environment %}
-      - {{ env }}
+      {{ env }}
       {% endfor %}
     {% endif %}
     {% if 'extra_hosts' in service_config.compose %}
@@ -47,5 +47,4 @@ services:
     {% if 'working_dir' in service_config.compose %}
     working_dir: {{ service_config.compose.working_dir }}
     {% endif %}
-
 {% endfor %}

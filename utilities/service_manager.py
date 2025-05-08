@@ -46,40 +46,9 @@ class ServiceManager:
         if os.path.exists(dockit_base_dir):
             return False
 
-        # Create base directories
-        os.makedirs(self.services_dir, exist_ok=True)
-        os.makedirs(self.templates_dir, exist_ok=True)
-
-        # Copy predefined services
-        predefined_services_path = PathResolver.get_predefined_services_path()
-        if os.path.exists(predefined_services_path):
-            for service_name in os.listdir(predefined_services_path):
-                source_path = os.path.join(predefined_services_path, service_name)
-                target_path = os.path.join(self.services_dir, service_name)
-                
-                if os.path.isdir(source_path):
-                    if os.path.exists(target_path):
-                        shutil.rmtree(target_path)
-                    shutil.copytree(source_path, target_path)
-                    self.messenger.info(f"Published predefined service: {service_name}")
-
-        # Copy predefined templates
-        predefined_templates_path = PathResolver.get_predefined_templates_path()
-        if os.path.exists(predefined_templates_path):
-            for template_name in os.listdir(predefined_templates_path):
-                source_path = os.path.join(predefined_templates_path, template_name)
-                target_path = os.path.join(self.templates_dir, template_name)
-                
-                if os.path.isdir(source_path):
-                    if os.path.exists(target_path):
-                        shutil.rmtree(target_path)
-                    shutil.copytree(source_path, target_path)
-                    self.messenger.info(f"Published predefined template: {template_name}")
-                elif os.path.isfile(source_path):
-                    shutil.copy2(source_path, target_path)
-                    self.messenger.info(f"Published predefined template file: {template_name}")
-        
-        self.load_all_services()  # Reload services after initialization
+        # Use PublishCommand to handle initialization and publishing
+        from commands.publish import PublishCommand
+        PublishCommand().publish(force=False)
         return True
 
     def get_container_path(self, service_name: str, filename: str) -> str:
@@ -127,7 +96,6 @@ class ServiceManager:
         if not os.path.exists(self.services_dir):
             os.makedirs(self.services_dir, exist_ok=True)
             return
-        
 
         for service_name in os.listdir(self.services_dir):
             service_dir = os.path.join(self.services_dir, service_name)

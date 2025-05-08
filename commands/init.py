@@ -14,12 +14,12 @@ class InitCommand:
     def run(self):
         self.messenger.info("Dockit init")
 
-        selected_services = self.collect_services()
+        selected_services = self.service_manager.collect_services()
         if not selected_services:
             self.messenger.warning("No services selected. Exiting.")
             return
 
-        selected_versions = self.collect_versions(selected_services)
+        selected_versions = self.service_manager.collect_versions(selected_services)
 
         confirmed = self.show_summary(selected_versions)
         if not confirmed:
@@ -29,23 +29,6 @@ class InitCommand:
         # 🔥 Call the Generator
         generator = Generator(selected_versions)
         generator.run()
-
-    def collect_services(self):
-        all_services = list(self.service_manager.services.keys())
-        return questionary.checkbox(
-            "Select services to include:",
-            choices=all_services
-        ).ask()
-
-    def collect_versions(self, selected_services):
-        selected_versions = {}
-        for service in selected_services:
-            versions = self.service_manager.get_service_versions(service)
-            version = questionary.select(
-                f"Select version for {service}:", choices=versions
-            ).ask()
-            selected_versions[service] = version
-        return selected_versions
 
     def show_summary(self, selected_versions):
         self.messenger.success("Selected configuration:")
