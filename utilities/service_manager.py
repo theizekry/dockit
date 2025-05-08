@@ -215,12 +215,13 @@ class ServiceManager:
                 with open(full_source_path, 'r') as src, open(target_file, 'w') as dst:
                     dst.write(src.read())
                 
-                # Add volume mapping with relative path
-                relative_target = os.path.join('./dockit', f"{service_name}-{version}", file_name)
-                service_config['compose']['volumes'].append(
-                    f"{relative_target}:{destination_path}"
-                )
-                self.messenger.info(f"Added file mapping: {relative_target} → {destination_path}")
+                # Add volume mapping with relative path only if skipVolumes is not True
+                if not file_config.get('skipVolumes', False):
+                    relative_target = os.path.join('./dockit', f"{service_name}-{version}", file_name)
+                    service_config['compose']['volumes'].append(
+                        f"{relative_target}:{destination_path}"
+                    )
+                    self.messenger.info(f"Added file mapping: {relative_target} → {destination_path}")
             else:
                 self.messenger.warning(f"File not found: {full_source_path}")
 
