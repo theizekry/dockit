@@ -8,30 +8,54 @@ on:
 jobs:
   tag:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for creating tags and releases
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for proper tag detection
 
       - name: Get Latest Tag
         id: get_tag
         run: |
+          echo "Fetching all tags..."
+          git fetch --tags
           tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "Latest tag found: $tag"
           echo "latest_tag=$tag" >> $GITHUB_OUTPUT
 
       - name: Bump Patch Version
         id: bump
         run: |
           tag=${{ steps.get_tag.outputs.latest_tag }}
+          echo "Processing tag: $tag"
           version="${tag#v}"
           IFS='.' read -r major minor patch <<< "$version"
           patch=$((patch + 1))
           new_tag="v$major.$minor.$patch"
+          echo "New tag will be: $new_tag"
           echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
 
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          if git rev-parse "${{ steps.bump.outputs.new_tag }}" >/dev/null 2>&1; then
+            echo "Tag ${{ steps.bump.outputs.new_tag }} already exists, skipping..."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "Tag ${{ steps.bump.outputs.new_tag }} does not exist, will create it"
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create and Push New Tag
+        if: steps.check_tag.outputs.skip == 'false'
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
+          echo "Creating new tag: ${{ steps.bump.outputs.new_tag }}"
           git tag ${{ steps.bump.outputs.new_tag }}
+          echo "Pushing tag to remote..."
           git push origin ${{ steps.bump.outputs.new_tag }}
+          echo "Tag pushed successfully!"
