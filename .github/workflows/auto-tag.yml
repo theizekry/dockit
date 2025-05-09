@@ -26,7 +26,27 @@ jobs:
           echo "Latest tag found: $tag"
           echo "latest_tag=$tag" >> $GITHUB_OUTPUT
 
+      - name: Get Latest Commit Hash
+        id: get_commit
+        run: |
+          commit_hash=$(git rev-parse HEAD)
+          echo "Current commit hash: $commit_hash"
+          echo "commit_hash=$commit_hash" >> $GITHUB_OUTPUT
+
+      - name: Check if commit is already tagged
+        id: check_commit
+        run: |
+          commit_hash=${{ steps.get_commit.outputs.commit_hash }}
+          if git describe --exact-match $commit_hash 2>/dev/null; then
+            echo "Commit $commit_hash is already tagged, skipping..."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "Commit $commit_hash is not tagged, will create new tag"
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Bump Patch Version
+        if: steps.check_commit.outputs.skip == 'false'
         id: bump
         run: |
           tag=${{ steps.get_tag.outputs.latest_tag }}
@@ -38,19 +58,8 @@ jobs:
           echo "New tag will be: $new_tag"
           echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
 
-      - name: Check if tag exists
-        id: check_tag
-        run: |
-          if git rev-parse "${{ steps.bump.outputs.new_tag }}" >/dev/null 2>&1; then
-            echo "Tag ${{ steps.bump.outputs.new_tag }} already exists, skipping..."
-            echo "skip=true" >> $GITHUB_OUTPUT
-          else
-            echo "Tag ${{ steps.bump.outputs.new_tag }} does not exist, will create it"
-            echo "skip=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Create and Push New Tag
-        if: steps.check_tag.outputs.skip == 'false'
+        if: steps.check_commit.outputs.skip == 'false'
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
