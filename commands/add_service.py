@@ -67,7 +67,8 @@ class AddServiceCommand:
             with open(service_json_path, "w") as f:
                 json.dump(existing_config, f, indent=4)
 
-            self.messenger.success(f"Service '{service_name}' added successfully!")
+            self.messenger.success(f"Service '{service_name}' added to {self.services_dir} successfully!")
+            self.messenger.warning(f"You must configure the service before it can be used.\nEdit {service_json_path} to get started.")
         except KeyboardInterrupt:
             self.messenger.info("\nOperation cancelled by user")
             sys.exit(0)

@@ -11,13 +11,6 @@ import fnmatch
 from utilities.debugger import Debugger
 from utilities.path_resolver import PathResolver
 
-def get_resource_path(relative_path):
-    """Get absolute path to resource, works for dev and for PyInstaller"""
-    # If not running in PyInstaller, use the user's home directory
-    base_path = os.path.expanduser("~/.dockit")
-       
-    return os.path.join(base_path, relative_path)
-
 class ServiceManager:
     _instance = None
 
@@ -153,7 +146,7 @@ class ServiceManager:
         if 'publishes' not in service_config:
             return
 
-        service_dir = os.path.join('services', service_name)
+        service_dir = os.path.join(self.services_dir, service_name)
         dockit_dir = os.path.join('dockit', f"{service_name}-{version}")
 
         # Ensure dockit directory exists

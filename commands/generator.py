@@ -4,7 +4,7 @@ from utilities.service_manager import ServiceManager
 import os
 import json
 from jinja2 import Environment, FileSystemLoader
-
+from utilities.path_resolver import PathResolver
 class Generator:
     def __init__(self, selected_services: dict):
         """
@@ -12,9 +12,10 @@ class Generator:
         """
         self.selected_services = selected_services
         self.messenger = Messenger()
+        self.templates_dir = PathResolver.get_templates_dir()
         self.service_manager = ServiceManager()
         self.env = Environment(
-            loader=FileSystemLoader('templates'),
+            loader=FileSystemLoader(self.templates_dir),
             trim_blocks=True,
             lstrip_blocks=True
         )

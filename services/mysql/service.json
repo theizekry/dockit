@@ -6,8 +6,9 @@
                 "./dockit/data/mysql/:/var/lib/mysql/"
             ],
             "environment": [
-                "MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}",
-                "MYSQL_DATABASE: ${DB_DATABASE:-dockit}"
+                "MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}",
+                "MYSQL_DATABASE: ${DB_DATABASE:-dockit}",
+                "MYSQL_ALLOW_EMPTY_PASSWORD: true"
             ]
         }
     }
