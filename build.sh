@@ -4,15 +4,15 @@ set -e
 
 APP_NAME="dockit"
 
-echo "🔨 Building binary..."
+echo "🔨 Building..."
 pyinstaller --onedir --clean --noconfirm --name "$APP_NAME" \
   --add-data "services:services" \
   --add-data "templates:templates" \
   app.py
 
-echo "📦 Zipping build directory..."
+echo "📦 Zipping binary output folder..."
 cd dist
-zip -r "${APP_NAME}.zip" "$APP_NAME"
+zip -r "${APP_NAME}.zip" "${APP_NAME}/"
 cd ..
 
-echo "✅ Build complete: dist/${APP_NAME}.zip"
+echo "✅ Ready: dist/${APP_NAME}.zip"
