@@ -4,6 +4,7 @@ from commands.add_service import AddServiceCommand
 from commands.delete_service import DeleteServiceCommand
 from commands.publish import PublishCommand
 from commands.about import AboutCommand
+from commands.view_service import ViewServiceCommand
 
 class DockitCLI:
     def __init__(self):
@@ -13,6 +14,7 @@ class DockitCLI:
         self.delete_service_cmd = DeleteServiceCommand()
         self.publish_cmd = PublishCommand()
         self.about_cmd = AboutCommand()
+        self.view_service_cmd = ViewServiceCommand()
 
         # Register the CLI commands
         self.app.command("init")(self.init_cmd.run)
@@ -20,6 +22,7 @@ class DockitCLI:
         self.app.command("delete-service")(self.delete_service_cmd.run)
         self.app.command("force-publish")(self.publish_cmd.run)
         self.app.command("about")(self.about_cmd.run)
+        self.app.command("view-service")(self.view_service_cmd.run)
 
 def main():
     DockitCLI().app()
