@@ -1,0 +1,42 @@
+{
+    "priority": 70,
+    "latest": {
+        "image": "postgres:latest",
+        "compose": {
+            "volumes": [
+                "./dockit/data/postgres/:/var/lib/postgresql/data/"
+            ],
+            "environment": [
+                "POSTGRES_USER: ${DB_USERNAME:-postgres}",
+                "POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}",
+                "POSTGRES_DB: ${DB_DATABASE:-dockit}"
+            ]
+        }
+    },
+    "15": {
+        "image": "postgres:15",
+        "compose": {
+            "volumes": [
+                "./dockit/data/postgres/:/var/lib/postgresql/data/"
+            ],
+            "environment": [
+                "POSTGRES_USER: ${DB_USERNAME:-postgres}",
+                "POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}",
+                "POSTGRES_DB: ${DB_DATABASE:-dockit}"
+            ]
+        }
+    },
+    "14": {
+        "image": "postgres:14",
+        "compose": {
+            "volumes": [
+                "./dockit/data/postgres/:/var/lib/postgresql/data/"
+            ],
+            "environment": [
+                "POSTGRES_USER: ${DB_USERNAME:-postgres}",
+                "POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}",
+                "POSTGRES_DB: ${DB_DATABASE:-dockit}"
+            ]
+        }
+    }
+} 

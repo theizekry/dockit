@@ -53,4 +53,7 @@ services:
       - {{ dep }}
       {% endfor %}
     {% endif %}
+    {% if 'command' in service_config.compose %}
+    command: {{ service_config.compose.command|tojson }}
+    {% endif %}
 {% endfor %}

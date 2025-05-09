@@ -1,0 +1,42 @@
+{
+    "priority": 90,
+    "vite": {
+        "image": "node:latest",
+        "compose": {
+            "volumes": [
+                "./:/app"
+            ],
+            "working_dir": "/app",
+            "ports": [
+                "${VITE_PORT:-5173}:5173"
+            ],
+            "command": [ "/bin/bash","-c","npm i && npm run dev" ]
+        }
+    },
+    "lts-jod": {
+        "image": "node:lts-jod",
+        "compose": {
+            "volumes": [
+                "./:/app"
+            ],
+            "working_dir": "/app",
+            "ports": [
+                "${APP_PORT:-3000}:3000"
+            ],
+            "command": [ "/bin/bash","-c","npm i && node index.js" ]
+        }
+    },
+    "lts-iron": {
+        "image": "node:lts-iron",
+        "compose": {
+            "volumes": [
+                "./:/app"
+            ],
+            "working_dir": "/app",
+            "ports": [
+                "${APP_PORT:-3000}:3000"
+            ],
+            "command": [ "/bin/bash","-c","npm i && node index.js" ]
+        }
+    }
+} 

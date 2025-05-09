@@ -1,0 +1,15 @@
+{
+    "priority": 50,
+    "latest": {
+        "image": "redis:latest",
+        "compose": {
+            "environment": [
+                "REDIS_PASSWORD: ${REDIS_PASSWORD}",
+                "REDIS_PORT: ${REDIS_PORT:-6379}"
+            ],
+            "ports": [
+                "${REDIS_PORT:-6379}:6379"
+            ]
+        }
+    }
+} 
