@@ -45,7 +45,7 @@ class AddServiceCommand:
             os.makedirs(version_dir, exist_ok=True)
 
             # Load skeleton template
-            skeleton_file = "image_base.json" if version_type == "direct" else "build_version.json"
+            skeleton_file = "image_base.json" if version_type == "Docker Registry" else "build_version.json"
             skeleton_path = os.path.join(self.templates_dir, "skeletons", skeleton_file)
             with open(skeleton_path, "r") as f:
                 skeleton = json.load(f)
@@ -102,10 +102,13 @@ class AddServiceCommand:
         try:
             version_type = questionary.select(
                 "Select version type:",
-                choices=["direct", "build"]
+                choices=["Docker Registry", "Build Image"]
             ).ask()
             return version_type
         except KeyboardInterrupt:
+            self.messenger.info("\nOperation cancelled by user")
+            sys.exit(0)
+
             self.messenger.info("\nOperation cancelled by user")
             sys.exit(0)
 

@@ -35,7 +35,7 @@ class AboutCommand:
             self.console.print("\n[bold]Features:[/bold]")
             self.console.print("• Easy service configuration management")
             self.console.print("• Support for multiple versions")
-            self.console.print("• Direct image and build configurations")
+            self.console.print("• Docker Registry and build Image configurations")
             self.console.print("• Configuration file management")
             self.console.print("• Interactive CLI interface")
 
