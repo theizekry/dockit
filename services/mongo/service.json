@@ -1,0 +1,42 @@
+{
+    "priority": 65,
+    "latest": {
+        "image": "mongo:latest",
+        "compose": {
+            "volumes": [
+                "./dockit/data/mongo/:/data/db/"
+            ],
+            "environment": [
+                "MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME:-root}",
+                "MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD:-secret}",
+                "MONGO_INITDB_DATABASE: ${DB_DATABASE:-dockit}"
+            ]
+        }
+    },
+    "7": {
+        "image": "mongo:7",
+        "compose": {
+            "volumes": [
+                "./dockit/data/mongo/:/data/db/"
+            ],
+            "environment": [
+                "MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME:-root}",
+                "MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD:-secret}",
+                "MONGO_INITDB_DATABASE: ${DB_DATABASE:-dockit}"
+            ]
+        }
+    },
+    "6": {
+        "image": "mongo:6",
+        "compose": {
+            "volumes": [
+                "./dockit/data/mongo/:/data/db/"
+            ],
+            "environment": [
+                "MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME:-root}",
+                "MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD:-secret}",
+                "MONGO_INITDB_DATABASE: ${DB_DATABASE:-dockit}"
+            ]
+        }
+    }
+} 
