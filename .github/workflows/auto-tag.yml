@@ -23,9 +23,10 @@ jobs:
         run: |
           echo "Fetching all tags..."
           git fetch --tags
-          tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          echo "Latest tag found: $tag"
-          echo "latest_tag=$tag" >> $GITHUB_OUTPUT
+          # Get all tags and sort them by version
+          latest_tag=$(git tag -l "v*" | sort -V | tail -n 1 || echo "v0.0.0")
+          echo "Latest tag found: $latest_tag"
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
 
       - name: Get Latest Commit Hash
         id: get_commit
@@ -56,6 +57,14 @@ jobs:
           IFS='.' read -r major minor patch <<< "$version"
           patch=$((patch + 1))
           new_tag="v$major.$minor.$patch"
+          
+          # Check if the new tag already exists
+          while git rev-parse "$new_tag" >/dev/null 2>&1; do
+            echo "Tag $new_tag already exists, incrementing patch version..."
+            patch=$((patch + 1))
+            new_tag="v$major.$minor.$patch"
+          done
+          
           echo "New tag will be: $new_tag"
           echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
 
