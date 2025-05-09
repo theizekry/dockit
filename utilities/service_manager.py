@@ -84,11 +84,12 @@ class ServiceManager:
         return publishable_files
 
     def load_all_services(self):
-        
-        """Load all services from the services directory"""
+        """Load all services from the services directory, sorted by priority descending."""
         if not os.path.exists(self.services_dir):
             os.makedirs(self.services_dir, exist_ok=True)
             return
+
+        services_with_priority = []
 
         for service_name in os.listdir(self.services_dir):
             service_dir = os.path.join(self.services_dir, service_name)
@@ -96,7 +97,17 @@ class ServiceManager:
                 service_json = os.path.join(service_dir, "service.json")
                 if os.path.exists(service_json):
                     with open(service_json, "r") as f:
-                        self.services[service_name] = json.load(f)
+                        data = json.load(f)
+                        priority = data.pop("priority", 0)  # remove priority after reading it
+                        services_with_priority.append((priority, service_name, data))
+
+        # Sort by priority (descending)
+        sorted_services = sorted(services_with_priority, key=lambda x: x[0], reverse=True)
+
+        self.services = {
+            service_name: data
+            for _, service_name, data in sorted_services
+        }
 
     def get_service(self, service_name):
         """Get service configuration"""
