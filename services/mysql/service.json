@@ -3,7 +3,7 @@
         "image": "mysql:latest",
         "compose": {
             "volumes": [
-                "./data/mysql/:/var/lib/mysql/"
+                "./dockit/data/mysql/:/var/lib/mysql/"
             ],
             "environment": [
                 "MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}",
