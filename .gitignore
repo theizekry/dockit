@@ -11,3 +11,5 @@ dist/
 *.spec
 .DS_Store
 .env
+# Dockit data directory
+dockit/data/

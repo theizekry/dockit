@@ -47,4 +47,10 @@ services:
     {% if 'working_dir' in service_config.compose %}
     working_dir: {{ service_config.compose.working_dir }}
     {% endif %}
+    {% if 'depends_on' in service_config.compose %}
+    depends_on:
+      {% for dep in service_config.compose.depends_on %}
+      - {{ dep }}
+      {% endfor %}
+    {% endif %}
 {% endfor %}

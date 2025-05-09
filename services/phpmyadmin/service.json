@@ -12,6 +12,9 @@
                 "PMA_PASSWORD: ${DB_PASSWORD:-root}",
                 "MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}",
                 "UPLOAD_LIMIT: 100M"
+            ],
+            "depends_on": [
+                "mysql"
             ]
         }
     }

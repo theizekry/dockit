@@ -46,10 +46,10 @@
                 "install-php-extensions xdebug"
             ],
             "working_dir": "/var/www/html",
-            "command": "php-fpm -y /usr/local/etc/php-fpm.conf -R"
+            "command": ["/bin/bash", "-c", "php-fpm -y /usr/local/etc/php-fpm.conf -R"]
         },
         "compose": {
-            "context": ".",
+            "context": "./dockit/php-8.4",
             "dockerfile": "Dockerfile",
             "volumes": [
                 "./:/var/www/html"
@@ -116,7 +116,7 @@
             "command": "php-fpm -y /usr/local/etc/php-fpm.conf -R"
         },
         "compose": {
-            "context": ".",
+            "context": "./dockit/php-8.3",
             "dockerfile": "Dockerfile",
             "volumes": [
                 "./:/var/www/html"
@@ -183,7 +183,7 @@
             "command": "php-fpm -y /usr/local/etc/php-fpm.conf -R"
         },
         "compose": {
-            "context": ".",
+            "context": "./dockit/php-8.2",
             "dockerfile": "Dockerfile",
             "volumes": [
                 "./:/var/www/html"
@@ -250,7 +250,7 @@
             "command": "php-fpm -y /usr/local/etc/php-fpm.conf -R"
         },
         "compose": {
-            "context": ".",
+            "context": "./dockit/php-8.1",
             "dockerfile": "Dockerfile",
             "volumes": [
                 "./:/var/www/html"
@@ -317,7 +317,7 @@
             "command": "php-fpm -y /usr/local/etc/php-fpm.conf -R"
         },
         "compose": {
-            "context": ".",
+            "context": "./dockit/php-8.0",
             "dockerfile": "Dockerfile",
             "volumes": [
                 "./:/var/www/html"
@@ -384,7 +384,7 @@
             "command": "php-fpm -y /usr/local/etc/php-fpm.conf -R"
         },
         "compose": {
-            "context": ".",
+            "context": "./dockit/php-7.4",
             "dockerfile": "Dockerfile",
             "volumes": [
                 "./:/var/www/html"

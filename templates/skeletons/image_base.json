@@ -4,7 +4,8 @@
         "compose": {
             "ports": [],
             "volumes": [],      
-            "environment": []
+            "environment": [],
+            "depends_on": []
         },
         "publishes": {
             "filename": {

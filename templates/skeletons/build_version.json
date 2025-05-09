@@ -14,7 +14,8 @@
         "environment": [],
         "context": ".",
         "dockerfile": "Dockerfile",
-        "args": {}
+        "args": {},
+        "depends_on": []
     },
     "publishes": {
         "filename": {
