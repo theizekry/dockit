@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Fetch all history for proper tag detection
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Latest Tag
         id: get_tag
@@ -66,5 +67,5 @@ jobs:
           echo "Creating new tag: ${{ steps.bump.outputs.new_tag }}"
           git tag ${{ steps.bump.outputs.new_tag }}
           echo "Pushing tag to remote..."
-          git push origin ${{ steps.bump.outputs.new_tag }}
+          git push origin ${{ steps.bump.outputs.new_tag }} --force
           echo "Tag pushed successfully!"
