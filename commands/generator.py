@@ -19,7 +19,8 @@ class Generator:
             trim_blocks=True,
             lstrip_blocks=True
         )
-
+        # Add custom tojson filter with ensure_ascii=False
+        self.env.filters['tojson'] = lambda value: json.dumps(value, ensure_ascii=False)
         # Add custom dd filter
         self.env.filters['dd'] = Debugger.dd
 
