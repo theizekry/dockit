@@ -1,4 +1,5 @@
 {
+    "priority": 40,
     "latest":  {
         "image":"phpmyadmin",
         "compose":{
