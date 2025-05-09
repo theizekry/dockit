@@ -15,4 +15,4 @@ cd dist
 zip -r "${APP_NAME}.zip" "${APP_NAME}/"
 cd ..
 
-echo "✅ Ready: dist/${APP_NAME}.zip"
+echo "Ready to release: dist/${APP_NAME}.zip"
