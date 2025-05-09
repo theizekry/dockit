@@ -62,9 +62,12 @@ class PublishCommand:
                         self.messenger.warning(f"Service already exists: {service_name}")
                 else:
                     shutil.copytree(source_path, target_path)
-                    self.messenger.info(f"Published service: {service_name}")
+                    #self.messenger.info(f"Published service: {service_name}")
                     published = True
         
+        if published:
+            self.messenger.success(f"Services published to {PathResolver.get_services_dir()}")
+           
         return published
 
     def publish_templates(self, force: bool) -> bool:
@@ -90,7 +93,6 @@ class PublishCommand:
                         self.messenger.warning(f"Template already exists: {template_name}")
                 else:
                     shutil.copytree(source_path, target_path)
-                    self.messenger.info(f"Published template: {template_name}")
                     published = True
             elif os.path.isfile(source_path):
                 if os.path.exists(target_path):
@@ -102,8 +104,11 @@ class PublishCommand:
                         self.messenger.warning(f"Template file already exists: {template_name}")
                 else:
                     shutil.copy2(source_path, target_path)
-                    self.messenger.info(f"Published template file: {template_name}")
+                    #self.messenger.info(f"Published template file: {template_name}")
                     published = True
+
+        if published:
+            self.messenger.success(f"Templates published to {PathResolver.get_templates_dir()}")
         
         return published
 
@@ -111,5 +116,5 @@ class PublishCommand:
         """Initialize the base directories for services and templates"""
         os.makedirs(self.service_manager.services_dir, exist_ok=True)
         os.makedirs(self.service_manager.templates_dir, exist_ok=True)
-        self.messenger.info("Initialized base directories")
+        #self.messenger.info("Initialized base directories")
         

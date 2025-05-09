@@ -35,7 +35,7 @@ class Messenger:
 
     def success(self, msg: str):
         if not self.quiet:
-            rprint(f"[green]✓ {msg}[/green]")
+            rprint(f"[green][✓] {msg}[/green]")
 
     def warning(self, msg: str):
         if not self.quiet:
@@ -47,7 +47,7 @@ class Messenger:
 
     def note(self, msg: str):
         if not self.quiet:
-            rprint(f"[white]{msg}[/white]")
+            rprint(f"[white][#] {msg}[/white]")
 
     def sweet(self, msg: str):
         if not self.quiet:

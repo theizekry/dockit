@@ -43,7 +43,7 @@ class ServiceManager:
         dockit_base_dir = PathResolver.get_home_dir()
         
         # Check if this is first run by looking for .dockit directory
-        if os.path.exists(dockit_base_dir):
+        if os.path.exists(dockit_base_dir) and os.path.exists(self.services_dir) and os.path.exists(self.templates_dir):
             return False
 
         # Use PublishCommand to handle initialization and publishing
