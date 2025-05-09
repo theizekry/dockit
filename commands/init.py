@@ -2,12 +2,15 @@ import questionary
 from rich import print
 from utilities.messenger import Messenger
 from utilities.service_manager import ServiceManager
+from utilities.gitignore_manager import GitignoreManager
 from commands.generator import Generator
+import os
 
 class InitCommand:
     def __init__(self):
         self.messenger = Messenger()
         self.service_manager = ServiceManager()
+        self.gitignore_manager = GitignoreManager()
         self.service_manager.initialize_services()
         self.service_manager.load_all_services()
         
@@ -29,6 +32,9 @@ class InitCommand:
         # 🔥 Call the Generator
         generator = Generator(selected_versions)
         generator.run()
+
+        # Update .gitignore if it exists
+        self.gitignore_manager.add_pattern('dockit/data/', 'Dockit data directory')
 
     def show_summary(self, selected_versions):
         self.messenger.success("Selected configuration:")
