@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dockit-cli"
-version = "0.1.2"
+version = "0.0.4"
 description = "A Docker management tool"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -30,10 +30,10 @@ dependencies = [
 ]
 
 [project.scripts]
-dockit = "app:main"
+dockit = "code.app:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["."]
+packages = ["code"]
 
 [tool.hatch.metadata]
 allow-direct-references = true 
