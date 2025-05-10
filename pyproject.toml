@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dockit-cli"
-version = "0.0.4"
+version = "0.1.1"
 description = "A Docker management tool"
 readme = "README.md"
 requires-python = ">=3.11"
