@@ -1,60 +1,8 @@
 # Dockit CLI
 
-A powerful Docker management tool for developers that simplifies container management and service configuration.
-
-## Installation
-
-```bash
-pip install dockit-cli
-```
-
-## Usage
-
-```bash
-# Initialize a new project
-dockit init
-
-# Add a new service
-dockit add-service
-
-# Delete a service
-dockit delete-service
-
-# Force publish changes
-dockit force-publish
-
-# Show about information
-dockit about
-```
-
-## Features
-
-- 🚀 Easy project initialization
-- 🔧 Service management (add/delete)
-- 📦 Docker container management
-- 🎨 Rich terminal interface
-- ⚡ Interactive CLI prompts
-- 🔄 Version control integration
-
-## Requirements
-
-- Python 3.11 or higher
-- Docker installed and running
-- Git (for version control)
-
-## Dependencies
-
-- click>=8.0.0
-- rich>=10.0.0
-- docker>=6.0.0
-- typer>=0.9.0
-- questionary>=1.10.0
-- jinja2>=3.0.0
-- pyyaml>=6.0.0
-
-## License
-
-MIT License
+>
+> **Don’t copy old Docker files. Dockit them.**  
+>
 
 ___
 
@@ -69,17 +17,71 @@ ___
 
 ---
 
-## 📚 Documentation
+## Installation
 
-[Read the full docs here](https://dockit.gitbook.io/docs)
+Install Dockit globally with `pip`:
+
+```bash
+pip install dockit-cli
+```
+
+## Requirements
+
+- Python 3.11 or higher
+- Docker installed and running
+- Git (for version control)
+
+
+## Usage
+
+```bash
+dockit init
+```
+
+This will walk you through setting up a new Docker environment with the services you choose.
+
+> ### Add a new Service
+
+```bash
+dockit add-service
+```
+
+#### Pick from preconfigured services like:
+
+* Nginx
+* PHP
+* MySQL
+* PostgreSQL
+* Redis
+* MongoDB
+* phpMyAdmin
+
+---
+
+## Documentation
+
+[CHECKOUT DOCUMNETATION NOW](https://dockit.gitbook.io/docs)
 
 
 ## Test in a Clean Docker Container
-Need to test it first ? you can go with a simple container and checkout the tool.
-
+Need to test it first? You can go with a simple container and checkout the tool instantly:
 ```bash
-docker run --rm -it python:3.11-slim bash -c "pip install dockit-cli && dockit --help"
+docker run -it --rm python:3.11-slim bash 
+
+# inside bash run:
+
+pip install dockit-cli
+
+# start use the tool
+
+dockit --help
+
+# or 
+
+dockit init
+
 ```
+>This will let you try Dockit in isolation without affecting your local setup.
 
 ---
 
