@@ -34,19 +34,22 @@ jobs:
           chmod +x ./build.sh
           ./build.sh
 
-      - name: Verify Binary
+      - name: Remove Quarantine
         run: |
           cd dist/dockit
-          file dockit
-          chmod +x dockit
-          ./dockit --version || true
+          xattr -d com.apple.quarantine dockit || true
+          xattr -d com.apple.quarantine . || true
+          # Add a note about security
+          echo "Note: If you get a security warning, run: xattr -d com.apple.quarantine dockit" > SECURITY_NOTE.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           name: Release ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
-          files: dist/dockit.zip
+          files: |
+            dist/dockit.zip
+            dist/dockit/SECURITY_NOTE.txt
           generate_release_notes: true
           draft: false
           prerelease: false

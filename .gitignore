@@ -1,15 +1,42 @@
-.idea/
-venv
-# Ignore Python cache and compiled files
-**/__pycache__/
+# Python
 __pycache__/
 *.py[cod]
-dockit/ 
-docker-compose.yml
+*$py.class
+*.so
+.Python
 build/
+develop-eggs/
 dist/
-*.spec
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
 .DS_Store
-.env
+Thumbs.db
+
 # Dockit data directory
 dockit/data/
+
+# PyPI
+.pypirc
