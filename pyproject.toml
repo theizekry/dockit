@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "dockit-cli"
 version = "0.0.4"
 description = "A Docker management tool"
-readme = "../README.md"
+readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 authors = [
