@@ -2,7 +2,7 @@ import sys
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-from utilities.messenger import Messenger
+from dockit.utilities.messenger import Messenger
 
 class AboutCommand:
     def __init__(self):

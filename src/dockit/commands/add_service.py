@@ -2,9 +2,9 @@ import os
 import json
 import sys
 import questionary
-from utilities.messenger import Messenger
-from utilities.service_manager import ServiceManager
-from utilities.path_resolver import PathResolver
+from dockit.utilities.messenger import Messenger
+from dockit.utilities.service_manager import ServiceManager
+from dockit.utilities.path_resolver import PathResolver
 
 class AddServiceCommand:
     def __init__(self):

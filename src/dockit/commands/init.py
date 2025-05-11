@@ -1,10 +1,10 @@
 import questionary
 from rich import print
-from utilities.messenger import Messenger
-from utilities.service_manager import ServiceManager
-from utilities.gitignore_manager import GitignoreManager
-from utilities.docker_manager import DockerManager
-from commands.generator import Generator
+from dockit.utilities.messenger import Messenger
+from dockit.utilities.service_manager import ServiceManager
+from dockit.utilities.gitignore_manager import GitignoreManager
+from dockit.utilities.docker_manager import DockerManager
+from dockit.commands.generator import Generator
 import os
 
 class InitCommand:
@@ -15,7 +15,7 @@ class InitCommand:
         self.docker_manager = DockerManager()
         self.service_manager.initialize_services()
         self.service_manager.load_all_services()
-        
+
     def run(self):
         self.messenger.info("Dockit init")
 
@@ -37,7 +37,7 @@ class InitCommand:
 
         # Update .gitignore if it exists
         self.gitignore_manager.add_pattern('dockit/data/', 'Dockit data directory')
-        
+
         # Ask if user wants to start the containers
         if questionary.confirm("Would you like to start the containers now?", default=True).ask():
             self.docker_manager.start_containers()

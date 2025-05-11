@@ -1,10 +1,10 @@
-from utilities.messenger import Messenger
-from utilities.debugger import Debugger
-from utilities.service_manager import ServiceManager
+from dockit.utilities.messenger import Messenger
+from dockit.utilities.debugger import Debugger
+from dockit.utilities.service_manager import ServiceManager
 import os
 import json
 from jinja2 import Environment, FileSystemLoader
-from utilities.path_resolver import PathResolver
+from dockit.utilities.path_resolver import PathResolver
 class Generator:
     def __init__(self, selected_services: dict):
         """

@@ -3,9 +3,9 @@ import sys
 import shutil
 import questionary
 import typer
-from utilities.messenger import Messenger
-from utilities.service_manager import ServiceManager
-from utilities.path_resolver import PathResolver
+from dockit.utilities.messenger import Messenger
+from dockit.utilities.service_manager import ServiceManager
+from dockit.utilities.path_resolver import PathResolver
 
 class PublishCommand:
     def __init__(self):
