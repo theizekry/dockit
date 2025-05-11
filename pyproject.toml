@@ -33,7 +33,7 @@ dependencies = [
 dockit = "dockit_cli.app:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["dockit_cli"]
+packages = ["src/dockit_cli"]  # Updated to point to the src location
 
 [tool.hatch.metadata]
 allow-direct-references = true
@@ -41,4 +41,13 @@ allow-direct-references = true
 [tool.hatch.build]
 exclude = [
     "test_env/**",
+]
+
+# Add this section to ensure non-Python files are included
+[tool.hatch.build.resources]
+# Include all files in these directories
+shared-data = [
+    "src/dockit_cli/templates/**",
+    "src/dockit_cli/services/**",
+    "src/dockit_cli/skeletons/**",
 ]
