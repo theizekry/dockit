@@ -20,7 +20,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "click>=8.0.0",
+    "click>=8.0.0,<8.2.0",
     "rich>=10.0.0",
     "docker>=6.0.0",
     "typer>=0.9.0",

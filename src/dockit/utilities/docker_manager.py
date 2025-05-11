@@ -1,5 +1,5 @@
 import subprocess
-from utilities.messenger import Messenger
+from dockit.utilities.messenger import Messenger
 
 class DockerManager:
     def __init__(self):

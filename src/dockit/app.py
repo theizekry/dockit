@@ -1,9 +1,9 @@
 import typer
-from commands.init import InitCommand
-from commands.add_service import AddServiceCommand
-from commands.delete_service import DeleteServiceCommand
-from commands.publish import PublishCommand
-from commands.about import AboutCommand
+from dockit.commands.init import InitCommand
+from dockit.commands.add_service import AddServiceCommand
+from dockit.commands.delete_service import DeleteServiceCommand
+from dockit.commands.publish import PublishCommand
+from dockit.commands.about import AboutCommand
 
 class DockitCLI:
     def __init__(self):

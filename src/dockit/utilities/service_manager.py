@@ -6,10 +6,10 @@ from pathlib import Path
 from typing import Dict, Optional, List
 from questionary import Choice
 import questionary
-from utilities.messenger import Messenger
+from dockit.utilities.messenger import Messenger
 import fnmatch
-from utilities.debugger import Debugger
-from utilities.path_resolver import PathResolver
+from dockit.utilities.debugger import Debugger
+from dockit.utilities.path_resolver import PathResolver
 
 class ServiceManager:
     _instance = None
