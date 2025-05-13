@@ -14,16 +14,17 @@ class VersionCommand:
         return
 
     def get_version(self):
-            """Reads the version from pyproject.toml within the installed package or dev path."""
-            try:
-                package_path = Path(find_spec("dockit").origin).parent
-                candidate = package_path.parent.parent / "pyproject.toml"
-                if candidate.exists():
-                    with open(candidate) as f:
-                        content = f.read()
-                    match = re.search(r'version\s*=\s*["\']([^"\']+)["\']', content)
-                    return match.group(1) if match else "Version not found"
-                return "pyproject.toml not found"
-            except Exception as e:
-                return f"Error reading version: {e}"
+        return "2.2.0"
+            # """Reads the version from pyproject.toml within the installed package or dev path."""
+            # try:
+            #     package_path = Path(find_spec("dockit").origin).parent
+            #     candidate = package_path.parent.parent / "pyproject.toml"
+            #     if candidate.exists():
+            #         with open(candidate) as f:
+            #             content = f.read()
+            #         match = re.search(r'version\s*=\s*["\']([^"\']+)["\']', content)
+            #         return match.group(1) if match else "Version not found"
+            #     return "pyproject.toml not found"
+            # except Exception as e:
+            #     return f"Error reading version: {e}"
  

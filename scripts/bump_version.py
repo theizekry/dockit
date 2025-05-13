@@ -51,6 +51,7 @@ def main():
     print(f"git commit -m 'Bump version to {new_version}'")
     print(f"git tag -a v{new_version} -m 'Release v{new_version}'")
     print(f"git push origin main --tags")
+    print(f"[!] Do not forget to update the version in the src/dockit/commands/version.py file.")
 
 if __name__ == '__main__':
     main() 
