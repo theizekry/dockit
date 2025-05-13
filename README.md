@@ -25,11 +25,15 @@ Install Dockit globally with `pip`:
 pip install dockit-cli
 ```
 
+Or With pipx (recommended for macOS/Linux)
+```
+pipx install dockit-cli
+```
+
 ## Requirements
 
 - Python 3.11 or higher
 - Docker installed and running
-- Git (for version control)
 
 
 ## Usage
@@ -44,6 +48,12 @@ This will walk you through setting up a new Docker environment with the services
 
 ```bash
 dockit add-service
+```
+
+Or hit dockit --help to see all commands.
+
+```bash
+dockit --help
 ```
 
 #### Pick from preconfigured services like:
