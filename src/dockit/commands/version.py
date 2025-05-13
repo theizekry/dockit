@@ -14,7 +14,7 @@ class VersionCommand:
         return
 
     def get_version(self):
-        return "2.2.0"
+        return "2.2.1"
             # """Reads the version from pyproject.toml within the installed package or dev path."""
             # try:
             #     package_path = Path(find_spec("dockit").origin).parent
