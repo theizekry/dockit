@@ -40,7 +40,7 @@ class ServiceManager:
             return False
 
         # Use PublishCommand to handle initialization and publishing
-        from commands.publish import PublishCommand
+        from dockit.commands.publish import PublishCommand
         PublishCommand().publish(force=False)
         return True
 
