@@ -50,3 +50,6 @@ shared-data = [
     "src/dockit/services/**",
     "src/dockit/skeletons/**",
 ]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
