@@ -101,5 +101,10 @@ We welcome contributions! Please read the [contribution guide](https://dockit.gi
 
 ---
 
+
+
+https://github.com/user-attachments/assets/d105c9a3-6f29-44c9-b5f5-e1c378e2bae3
+
+
 ## 🪪 License
 Dockit is open-source software licensed under the [MIT License](LICENSE).
