@@ -8,7 +8,7 @@
             ],
             "environment":  [
                 "PMA_ARBITRARY: 0",
-                "PMA_HOST: ${DB_HOST:-mysql}",
+                "PMA_HOST: mysql",
                 "PMA_USER: ${DB_USERNAME:-root}",
                 "PMA_PASSWORD: ${DB_PASSWORD}",
                 "MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}",
